@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#FEE2E2"/>
-</selector>
+<resources>
+    <color name="chip_background_red">#FEE2E2</color>
+    <!-- Add other colors with names here -->
+</resources>
