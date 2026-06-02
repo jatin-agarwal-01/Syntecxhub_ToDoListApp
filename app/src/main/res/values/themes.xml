@@ -2,8 +2,22 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.ToDoListApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/onPrimary</item>
+        <item name="colorPrimaryContainer">@color/primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/onPrimaryContainer</item>
+        
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/onSecondary</item>
+        
+        <item name="android:statusBarColor">@color/gradient_start</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 
     <style name="Theme.ToDoListApp" parent="Base.Theme.ToDoListApp" />
+
+    <!-- Custom Style for MaterialCardView -->
+    <style name="ShapeAppearance.ToDoList.SmallComponent" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
 </resources>

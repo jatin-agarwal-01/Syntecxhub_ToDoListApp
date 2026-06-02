@@ -1,5 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Premium Material 3 Palette -->
+    <color name="primary">#6750A4</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryContainer">#EADDFF</color>
+    <color name="onPrimaryContainer">#21005D</color>
+
+    <color name="secondary">#625B71</color>
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#E8DEF8</color>
+    <color name="onSecondaryContainer">#1D192B</color>
+
+    <color name="tertiary">#7D5260</color>
+    <color name="onTertiary">#FFFFFF</color>
+    <color name="tertiaryContainer">#FFD8E4</color>
+    <color name="onTertiaryContainer">#31111D</color>
+
+    <color name="background">#FFFBFE</color>
+    <color name="onBackground">#1C1B1F</color>
+    <color name="surface">#FFFBFE</color>
+    <color name="onSurface">#1C1B1F</color>
+
+    <!-- Custom Gradient Colors -->
+    <color name="gradient_start">#6750A4</color>
+    <color name="gradient_end">#9575CD</color>
+    
+    <!-- Status Colors -->
+    <color name="task_completed">#4CAF50</color>
+    <color name="task_pending">#757575</color>
+    <color name="error">#B3261E</color>
+    
+    <color name="card_background">#FFFFFF</color>
+    <color name="divider_color">#E0E0E0</color>
 </resources>
