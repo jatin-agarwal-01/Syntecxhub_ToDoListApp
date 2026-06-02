@@ -1,14 +1,15 @@
 package com.jatin.syntecxhub_todolist
 
-/**
- * Data class representing a single Task in the To-Do List.
- *
- * @property id Unique identifier for the task (usually timestamp).
- * @property title The description or name of the task.
- * @property isCompleted Status indicating if the task is finished.
- */
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "tasks")
 data class Task(
-    val id: Long,
-    var title: String,
-    var isCompleted: Boolean = false
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val title: String,
+    val description: String = "",
+    val isCompleted: Boolean = false,
+    val priority: Int = 1,  // 0=High, 1=Medium, 2=Low
+    val dueDate: Long? = null,
+    val createdAt: Long = System.currentTimeMillis()
 )

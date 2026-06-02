@@ -1,206 +1,170 @@
 package com.jatin.syntecxhub_todolist
 
-import android.content.Context
+import android.app.DatePickerDialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.TextView
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.jatin.syntecxhub_todolist.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
+import java.util.Calendar
 
-/**
- * Main activity for the To-Do List application.
- * Manages the task list, persistence, and primary UI interactions.
- */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var taskAdapter: TaskAdapter
-    private var taskList = mutableListOf<Task>()
-    
-    private val gson = Gson()
-    private val sharedPrefs by lazy { getSharedPreferences("todo_prefs", Context.MODE_PRIVATE) }
+    private lateinit var viewModel: TaskViewModel
+    private lateinit var adapter: TaskAdapter
+    private var selectedDueDate: Long? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadTasks()
+        setupDatabase()
+        setupViewModel()
         setupRecyclerView()
-        setupFab()
-        updateEmptyState()
+        setupFAB()
+        setupSwipeToDelete()
+        observeTasks()
+    }
+
+    private fun setupDatabase() {
+        val db = TaskDatabase.getDatabase(applicationContext)
+        val dao = db.taskDao()
+        val repository = TaskRepository(dao)
+        val factory = TaskViewModelFactory(repository)
+        viewModel = ViewModelProvider(this, factory).get(TaskViewModel::class.java)
+    }
+
+    private fun setupViewModel() {
+        // Initialized in setupDatabase
     }
 
     private fun setupRecyclerView() {
-        taskAdapter = TaskAdapter(
-            tasks = taskList,
-            onTaskChecked = { saveTasks() },
-            onEditClicked = { task -> showTaskDialog(task) },
-            onDeleteClicked = { task -> showDeleteConfirmation(task) }
+        adapter = TaskAdapter(
+            onComplete = { task ->
+                viewModel.updateTask(task)
+                showSnackbar("Task marked ${if (task.isCompleted) "complete" else "incomplete"}")
+            },
+            onEdit = { task ->
+                showEditDialog(task)
+            },
+            onDelete = { task ->
+                viewModel.deleteTask(task)
+                showSnackbar("Task deleted", undoTask = task)
+            }
         )
 
-        binding.rvTasks.apply {
-            adapter = taskAdapter
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            setHasFixedSize(true)
+            adapter = this@MainActivity.adapter
         }
-
-        setupSwipeToDelete()
     }
 
-    private fun setupFab() {
-        binding.fabAddTask.setOnClickListener {
-            showTaskDialog()
+    private fun setupFAB() {
+        binding.fabAdd.setOnClickListener {
+            showAddDialog()
         }
-        
-        // Shrink/Extend FAB on scroll for better UX
-        binding.rvTasks.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) binding.fabAddTask.shrink()
-                else if (dy < 0) binding.fabAddTask.extend()
-            }
-        })
     }
 
     private fun setupSwipeToDelete() {
-        val swipeHandler = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
-            override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder, t: RecyclerView.ViewHolder) = false
+        val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Change bindingAdapterPosition to adapterPosition
                 val position = viewHolder.adapterPosition
-
-                // Add a safety check to ensure the position is still valid
-                if (position != RecyclerView.NO_POSITION) {
-                    val deletedTask = taskList[position]
-                    performDeletion(position, deletedTask)
+                if (position >= 0) {
+                    val task = adapter.currentList[position]
+                    viewModel.deleteTask(task)
+                    showSnackbar("Task deleted", undoTask = task)
                 }
             }
         }
-        ItemTouchHelper(swipeHandler).attachToRecyclerView(binding.rvTasks)
+
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(binding.recyclerView)
     }
 
-    private fun showTaskDialog(taskToEdit: Task? = null) {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_task, null)
-        val etTitle = dialogView.findViewById<TextInputEditText>(R.id.etTaskTitle)
-        val tilTitle = dialogView.findViewById<TextInputLayout>(R.id.tilTaskTitle)
-        val tvDialogTitle = dialogView.findViewById<TextView>(R.id.tvDialogTitle)
-
-        if (taskToEdit != null) {
-            tvDialogTitle.text = "Edit Task"
-            etTitle.setText(taskToEdit.title)
-        }
-
-        val dialog = AlertDialog.Builder(this, R.style.Theme_ToDoListApp)
-            .setView(dialogView)
-            .setPositiveButton("Save", null) // Set to null to override closing behavior for validation
-            .setNegativeButton("Cancel", null)
-            .create()
-
-        dialog.setOnShowListener {
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                val title = etTitle.text.toString().trim()
-                if (title.isEmpty()) {
-                    tilTitle.error = "Task title cannot be empty"
-                } else {
-                    if (taskToEdit == null) {
-                        addTask(title)
-                    } else {
-                        updateTask(taskToEdit, title)
-                    }
-                    dialog.dismiss()
-                }
+    private fun observeTasks() {
+        lifecycleScope.launch {
+            viewModel.taskList.collect { tasks ->
+                adapter.submitList(tasks)
+                binding.emptyStateText.visibility = if (tasks.isEmpty()) android.view.View.VISIBLE else android.view.View.GONE
             }
         }
-        dialog.show()
     }
 
-    private fun addTask(title: String) {
-        val newTask = Task(id = System.currentTimeMillis(), title = title)
-        taskList.add(0, newTask)
-        taskAdapter.notifyItemInserted(0)
-        binding.rvTasks.scrollToPosition(0)
-        saveTasks()
-        updateEmptyState()
-    }
+    private fun showAddDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_task, null)
+        val titleInput = dialogView.findViewById<EditText>(R.id.editTextTitle)
+        val descInput = dialogView.findViewById<EditText>(R.id.editTextDescription)
 
-    private fun updateTask(task: Task, newTitle: String) {
-        val index = taskList.indexOf(task)
-        if (index != -1) {
-            task.title = newTitle
-            taskAdapter.notifyItemChanged(index)
-            saveTasks()
-        }
-    }
+        selectedDueDate = null
 
-    private fun showDeleteConfirmation(task: Task) {
         AlertDialog.Builder(this)
-            .setTitle("Delete Task")
-            .setMessage("Are you sure you want to delete this task?")
-            .setPositiveButton("Delete") { _, _ ->
-                val position = taskList.indexOf(task)
-                if (position != -1) {
-                    performDeletion(position, task)
+            .setTitle("Add New Task")
+            .setView(dialogView)
+            .setPositiveButton("Add") { _, _ ->
+                val title = titleInput.text.toString().trim()
+                if (title.isNotEmpty()) {
+                    val desc = descInput.text.toString().trim()
+                    viewModel.addTask(title, desc, 1, selectedDueDate)
+                    showSnackbar("Task added successfully")
+                } else {
+                    showSnackbar("Please enter a task title")
                 }
             }
             .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun performDeletion(position: Int, task: Task) {
-        taskList.removeAt(position)
-        taskAdapter.notifyItemRemoved(position)
-        saveTasks()
-        updateEmptyState()
+    private fun showEditDialog(task: Task) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_task, null)
+        val titleInput = dialogView.findViewById<EditText>(R.id.editTextTitle)
+        val descInput = dialogView.findViewById<EditText>(R.id.editTextDescription)
 
-        Snackbar.make(binding.root, "Task removed", Snackbar.LENGTH_LONG)
-            .setAction("Undo") {
-                taskList.add(position, task)
-                taskAdapter.notifyItemInserted(position)
-                saveTasks()
-                updateEmptyState()
+        titleInput.setText(task.title)
+        descInput.setText(task.description)
+        selectedDueDate = task.dueDate
+
+        AlertDialog.Builder(this)
+            .setTitle("Edit Task")
+            .setView(dialogView)
+            .setPositiveButton("Update") { _, _ ->
+                val title = titleInput.text.toString().trim()
+                if (title.isNotEmpty()) {
+                    val desc = descInput.text.toString().trim()
+                    val updatedTask = task.copy(
+                        title = title,
+                        description = desc,
+                        dueDate = selectedDueDate
+                    )
+                    viewModel.updateTask(updatedTask)
+                    showSnackbar("Task updated")
+                }
             }
-            .setAnchorView(binding.fabAddTask)
+            .setNegativeButton("Cancel", null)
             .show()
     }
 
-    private fun updateEmptyState() {
-        if (taskList.isEmpty()) {
-            binding.emptyStateLayout.visibility = View.VISIBLE
-            binding.rvTasks.visibility = View.GONE
-        } else {
-            binding.emptyStateLayout.visibility = View.GONE
-            binding.rvTasks.visibility = View.VISIBLE
-        }
-    }
-
-    private fun saveTasks() {
-        val json = gson.toJson(taskList)
-        sharedPrefs.edit().putString("tasks_key", json).apply()
-    }
-
-    private fun loadTasks() {
-        val json = sharedPrefs.getString("tasks_key", null)
-        if (json != null) {
-            val type = object : TypeToken<MutableList<Task>>() {}.type
-            taskList = gson.fromJson(json, type)
-        } else {
-            // First run: Add sample tasks
-            taskList = mutableListOf(
-                Task(1, "Welcome to SyntecxHub To-Do!"),
-                Task(2, "Swipe tasks to delete them"),
-                Task(3, "Tap a task to mark it complete")
-            )
+    private fun showSnackbar(message: String, undoTask: Task? = null) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).apply {
+            if (undoTask != null) {
+                setAction("UNDO") {
+                    viewModel.addTask(undoTask.title, undoTask.description, undoTask.priority, undoTask.dueDate)
+                }
+            }
+            show()
         }
     }
 }

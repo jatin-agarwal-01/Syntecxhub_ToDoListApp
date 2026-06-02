@@ -3,61 +3,69 @@ package com.jatin.syntecxhub_todolist
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jatin.syntecxhub_todolist.databinding.ItemTaskBinding
 
-/**
- * Adapter for the Task RecyclerView.
- *
- * @property tasks List of tasks to display.
- * @property onTaskChecked Callback when a task's completion status is toggled.
- * @property onEditClicked Callback when the edit button is clicked.
- * @property onDeleteClicked Callback when the delete button is clicked.
- */
 class TaskAdapter(
-    private val tasks: MutableList<Task>,
-    private val onTaskChecked: (Task) -> Unit,
-    private val onEditClicked: (Task) -> Unit,
-    private val onDeleteClicked: (Task) -> Unit
-) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+    private val onComplete: (Task) -> Unit,
+    private val onEdit: (Task) -> Unit,
+    private val onDelete: (Task) -> Unit
+) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback()) {
 
     inner class TaskViewHolder(private val binding: ItemTaskBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: Task) {
-            binding.tvTaskTitle.text = task.title
-            
-            // Set initial checkbox state without triggering listener
-            binding.cbCompleted.setOnCheckedChangeListener(null)
-            binding.cbCompleted.isChecked = task.isCompleted
-            
-            updateUI(task.isCompleted)
+            binding.apply {
+                taskTitle.text = task.title
+                taskDescription.text = task.description
+                
+                // Strikethrough for completed tasks
+                if (task.isCompleted) {
+                    taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    root.alpha = 0.6f
+                } else {
+                    taskTitle.paintFlags = taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    root.alpha = 1.0f
+                }
 
-            binding.cbCompleted.setOnCheckedChangeListener { _, isChecked ->
-                task.isCompleted = isChecked
-                updateUI(isChecked)
-                onTaskChecked(task)
-            }
+                // Priority badge colors
+                val (color, label) = when (task.priority) {
+                    0 -> Pair("#FF0000", "HIGH")
+                    1 -> Pair("#FFA500", "MED")
+                    else -> Pair("#00AA00", "LOW")
+                }
+                priorityBadge.text = label
+                priorityBadge.setBackgroundColor(android.graphics.Color.parseColor(color))
 
-            binding.btnEdit.setOnClickListener { onEditClicked(task) }
-            binding.btnDelete.setOnClickListener { onDeleteClicked(task) }
-            
-            // Allow clicking the card to toggle completion (UX improvement)
-            binding.root.setOnClickListener {
-                binding.cbCompleted.isChecked = !binding.cbCompleted.isChecked
-            }
-        }
+                // Due date
+                if (task.dueDate != null) {
+                    val dueText = java.text.SimpleDateFormat("MMM dd", java.util.Locale.US)
+                        .format(task.dueDate)
+                    dueDateText.text = dueText
+                    dueDateText.visibility = android.view.View.VISIBLE
+                } else {
+                    dueDateText.visibility = android.view.View.GONE
+                }
 
-        private fun updateUI(isCompleted: Boolean) {
-            if (isCompleted) {
-                binding.tvTaskTitle.paintFlags = binding.tvTaskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                binding.tvTaskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.task_pending))
-                binding.root.alpha = 0.6f
-            } else {
-                binding.tvTaskTitle.paintFlags = binding.tvTaskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                binding.tvTaskTitle.setTextColor(ContextCompat.getColor(binding.root.context, R.color.onSurface))
-                binding.root.alpha = 1.0f
+                // Checkbox listener
+                completeCheckbox.setOnCheckedChangeListener(null)
+                completeCheckbox.isChecked = task.isCompleted
+                completeCheckbox.setOnCheckedChangeListener { _, isChecked ->
+                    onComplete(task.copy(isCompleted = isChecked))
+                }
+
+                // Edit click
+                root.setOnClickListener {
+                    onEdit(task)
+                }
+
+                // Delete button
+                deleteBtn.setOnClickListener {
+                    onDelete(task)
+                }
             }
         }
     }
@@ -68,8 +76,13 @@ class TaskAdapter(
     }
 
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        holder.bind(tasks[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = tasks.size
+    companion object {
+        class DiffCallback : DiffUtil.ItemCallback<Task>() {
+            override fun areItemsTheSame(oldItem: Task, newItem: Task) = oldItem.id == newItem.id
+            override fun areContentsTheSame(oldItem: Task, newItem: Task) = oldItem == newItem
+        }
+    }
 }
