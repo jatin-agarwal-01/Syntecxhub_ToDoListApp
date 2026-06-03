@@ -1,88 +1,110 @@
 package com.jatin.syntecxhub_todolist
 
+import android.graphics.Color
 import android.graphics.Paint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.jatin.syntecxhub_todolist.databinding.ItemTaskBinding
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class TaskAdapter(
-    private val onComplete: (Task) -> Unit,
-    private val onEdit: (Task) -> Unit,
+    private val onToggle: (Task) -> Unit,
+    private val onEdit:   (Task) -> Unit,
     private val onDelete: (Task) -> Unit
-) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback()) {
+) : ListAdapter<Task, TaskAdapter.TaskViewHolder>(DiffCallback) {
 
-    inner class TaskViewHolder(private val binding: ItemTaskBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    /* ── ViewHolder ──────────────────────────────────────────── */
+
+    inner class TaskViewHolder(
+        private val binding: ItemTaskBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(task: Task) {
             binding.apply {
-                taskTitle.text = task.title
-                taskDescription.text = task.description
-                
-                // Strikethrough for completed tasks
+
+                // ── Title + completed styling ─────────────────
+                tvTitle.text = task.title
                 if (task.isCompleted) {
-                    taskTitle.paintFlags = taskTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                    root.alpha = 0.6f
+                    tvTitle.paintFlags = tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                    tvTitle.setTextColor(Color.parseColor("#9E9E9E"))
+                    cardRoot.alpha = 0.60f
                 } else {
-                    taskTitle.paintFlags = taskTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                    root.alpha = 1.0f
+                    tvTitle.paintFlags =
+                        tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                    tvTitle.setTextColor(Color.parseColor("#1C1B1F"))
+                    cardRoot.alpha = 1f
                 }
 
-                // Priority badge colors
-                val (color, label) = when (task.priority) {
-                    0 -> Pair("#FF0000", "HIGH")
-                    1 -> Pair("#FFA500", "MED")
-                    else -> Pair("#00AA00", "LOW")
-                }
-                priorityBadge.text = label
-                priorityBadge.setBackgroundColor(android.graphics.Color.parseColor(color))
-
-                // Due date
-                if (task.dueDate != null) {
-                    val dueText = java.text.SimpleDateFormat("MMM dd", java.util.Locale.US)
-                        .format(task.dueDate)
-                    dueDateText.text = dueText
-                    dueDateText.visibility = android.view.View.VISIBLE
+                // ── Description ───────────────────────────────
+                if (task.description.isNotBlank()) {
+                    tvDescription.text       = task.description
+                    tvDescription.visibility = View.VISIBLE
                 } else {
-                    dueDateText.visibility = android.view.View.GONE
+                    tvDescription.visibility = View.GONE
                 }
 
-                // Checkbox listener
-                completeCheckbox.setOnCheckedChangeListener(null)
-                completeCheckbox.isChecked = task.isCompleted
-                completeCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                    onComplete(task.copy(isCompleted = isChecked))
+                // ── Created date ──────────────────────────────
+                tvDate.text = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+                    .format(Date(task.createdAt))
+
+                // ── Priority chip ─────────────────────────────
+                val (bgHex, fgHex, label) = when (task.priority) {
+                    0    -> Triple("#FFCDD2", "#B71C1C", "HIGH")
+                    1    -> Triple("#FFE0B2", "#E65100", "MED")
+                    else -> Triple("#C8E6C9", "#1B5E20", "LOW")
+                }
+                chipPriority.text = label
+                chipPriority.setBackgroundColor(Color.parseColor(bgHex))
+                chipPriority.setTextColor(Color.parseColor(fgHex))
+
+                // ── Reminder chip ─────────────────────────────
+                val reminderMillis = task.reminderTime
+                if (reminderMillis != null && !task.isCompleted) {
+                    val fmt = SimpleDateFormat("EEE hh:mm a", Locale.getDefault())
+                    tvReminder.text       = "⏰ ${fmt.format(Date(reminderMillis))}"
+                    tvReminder.visibility = View.VISIBLE
+                } else {
+                    tvReminder.visibility = View.GONE
                 }
 
-                // Edit click
-                root.setOnClickListener {
-                    onEdit(task)
+                // ── Checkbox ──────────────────────────────────
+                cbDone.setOnCheckedChangeListener(null)
+                cbDone.isChecked = task.isCompleted
+                cbDone.setOnCheckedChangeListener { _, checked ->
+                    onToggle(task.copy(isCompleted = checked))
                 }
 
-                // Delete button
-                deleteBtn.setOnClickListener {
-                    onDelete(task)
-                }
+                // ── Click → edit ──────────────────────────────
+                cardRoot.setOnClickListener { onEdit(task) }
+
+                // ── Delete ────────────────────────────────────
+                btnDelete.setOnClickListener { onDelete(task) }
             }
         }
     }
 
+    /* ── Adapter overrides ───────────────────────────────────── */
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val binding = ItemTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemTaskBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
         return TaskViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) =
         holder.bind(getItem(position))
-    }
 
-    companion object {
-        class DiffCallback : DiffUtil.ItemCallback<Task>() {
-            override fun areItemsTheSame(oldItem: Task, newItem: Task) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: Task, newItem: Task) = oldItem == newItem
-        }
+    /* ── DiffUtil ────────────────────────────────────────────── */
+
+    private companion object DiffCallback : DiffUtil.ItemCallback<Task>() {
+        override fun areItemsTheSame(old: Task, new: Task) = old.id == new.id
+        override fun areContentsTheSame(old: Task, new: Task) = old == new
     }
 }

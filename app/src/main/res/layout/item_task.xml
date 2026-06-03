@@ -1,86 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/card_stroke"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="12dp">
+        android:paddingHorizontal="16dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="12dp">
 
-        <!-- Title and Priority Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
-
-            <CheckBox
-                android:id="@+id/completeCheckbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp" />
-
-            <TextView
-                android:id="@+id/taskTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:text="Task Title" />
-
-            <TextView
-                android:id="@+id/priorityBadge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:text="HIGH"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:layout_marginStart="8dp" />
+        <!-- Row 1: checkbox | title | priority -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical">
+            <CheckBox android:id="@+id/cbDone" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginEnd="10dp"
+                android:buttonTint="@color/purple_primary" />
+            <TextView android:id="@+id/tvTitle" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:textSize="16sp" android:textStyle="bold" android:textColor="@color/text_primary"
+                android:maxLines="2" android:ellipsize="end" tools:text="Buy groceries" />
+            <TextView android:id="@+id/chipPriority" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:layout_marginStart="8dp"
+                android:paddingHorizontal="10dp" android:paddingVertical="4dp"
+                android:textSize="10sp" android:textStyle="bold" android:text="MED" />
         </LinearLayout>
 
         <!-- Description -->
-        <TextView
-            android:id="@+id/taskDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp"
-            android:textColor="#666666" />
+        <TextView android:id="@+id/tvDescription" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:layout_marginTop="5dp"
+            android:layout_marginStart="38dp" android:textSize="13sp"
+            android:textColor="@color/text_secondary" android:maxLines="2"
+            android:ellipsize="end" android:visibility="gone"
+            tools:text="Pick up milk and eggs" tools:visibility="visible" />
 
-        <!-- Due Date and Delete Row -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginTop="8dp">
+        <!-- Category + Reminder row -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginTop="8dp"
+            android:layout_marginStart="38dp">
 
-            <TextView
-                android:id="@+id/dueDateText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Due: Jan 01"
-                android:textSize="12sp"
-                android:textColor="#999999"
-                android:visibility="gone" />
+            <TextView android:id="@+id/tvCategory" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp" android:textSize="11sp"
+                android:textColor="@color/purple_primary"
+                android:background="@drawable/bg_category_chip"
+                android:layout_marginEnd="8dp" tools:text="📁 Work" />
 
-            <Button
-                android:id="@+id/deleteBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:textSize="12sp" />
+            <TextView android:id="@+id/tvReminder" android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:paddingHorizontal="8dp"
+                android:paddingVertical="3dp" android:textSize="11sp"
+                android:textStyle="bold" android:textColor="@color/reminder_text"
+                android:background="@drawable/bg_reminder_chip"
+                android:visibility="gone" tools:text="⏰ Mon 08:00 AM" tools:visibility="visible" />
+        </LinearLayout>
+
+        <!-- Date + Delete row -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginTop="8dp" android:layout_marginStart="38dp">
+            <TextView android:id="@+id/tvDate" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:textSize="11sp" android:textColor="@color/text_secondary"
+                tools:text="Jun 3, 2026" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDelete" style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content" android:layout_height="32dp"
+                android:text="Delete" android:textColor="#D32F2F" android:textSize="12sp"
+                app:rippleColor="#20D32F2F" />
         </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

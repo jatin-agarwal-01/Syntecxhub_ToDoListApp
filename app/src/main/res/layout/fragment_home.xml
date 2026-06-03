@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_screen">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:paddingBottom="20dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp">
+
+            <!-- Header -->
+            <TextView
+                android:id="@+id/tvWelcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                tools:text="Hi, Jatin 👋" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="My Tasks"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/tvDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                tools:text="Wednesday, Jun 3" />
+
+            <!-- Dashboard card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/purple_primary">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:id="@+id/tvBannerMessage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        tools:text="You have 3 tasks pending" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
+
+                        <ProgressBar
+                            android:id="@+id/progressBar"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="0dp"
+                            android:layout_height="8dp"
+                            android:layout_weight="1"
+                            android:progress="0"
+                            android:progressDrawable="@drawable/progress_bar_white"
+                            android:max="100" />
+
+                        <TextView
+                            android:id="@+id/tvProgressPercent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textSize="13sp"
+                            android:textStyle="bold"
+                            android:textColor="#FFFFFF"
+                            tools:text="40%" />
+                    </LinearLayout>
+
+                    <!-- Stat chips -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="16dp">
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                            android:background="@drawable/bg_stat_chip" android:padding="10dp" android:layout_marginEnd="5dp">
+                            <TextView android:id="@+id/tvStatTotal" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:textSize="22sp"
+                                android:textStyle="bold" android:textColor="#FFFFFF" tools:text="5" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Total" android:textSize="11sp" android:textColor="#CCE0FF" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                            android:background="@drawable/bg_stat_chip" android:padding="10dp" android:layout_marginHorizontal="3dp">
+                            <TextView android:id="@+id/tvStatDone" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:textSize="22sp"
+                                android:textStyle="bold" android:textColor="#FFFFFF" tools:text="2" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Done" android:textSize="11sp" android:textColor="#CCE0FF" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical" android:gravity="center"
+                            android:background="@drawable/bg_stat_chip" android:padding="10dp" android:layout_marginStart="5dp">
+                            <TextView android:id="@+id/tvStatPending" android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" android:textSize="22sp"
+                                android:textStyle="bold" android:textColor="#FFFFFF" tools:text="3" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Pending" android:textSize="11sp" android:textColor="#CCE0FF" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Tasks label -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="10dp"
+                android:text="All Tasks"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+
+            <!-- Empty state -->
+            <LinearLayout
+                android:id="@+id/layoutEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="📋" android:textSize="52sp" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:text="No tasks yet!"
+                    android:textSize="18sp" android:textStyle="bold" android:textColor="@color/text_primary" />
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp" android:text="Tap + to create your first task"
+                    android:textSize="14sp" android:textColor="@color/text_secondary" />
+            </LinearLayout>
+
+            <!-- RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTasks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- FAB -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="20dp"
+        android:text="Add Task"
+        android:textColor="#FFFFFF"
+        app:icon="@android:drawable/ic_input_add"
+        app:iconTint="#FFFFFF"
+        app:backgroundTint="@color/purple_primary"
+        app:elevation="6dp" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

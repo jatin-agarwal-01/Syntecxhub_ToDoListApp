@@ -8,64 +8,42 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
-    
-    private val _taskList = MutableStateFlow<List<Task>>(emptyList())
-    val taskList: StateFlow<List<Task>> = _taskList.asStateFlow()
 
-    private val _searchQuery = MutableStateFlow("")
-    val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+    val tasks: StateFlow<List<Task>> = _tasks.asStateFlow()
 
     init {
-        loadTasks()
-    }
-
-    private fun loadTasks() {
         viewModelScope.launch {
-            repository.allTasks.collect { tasks ->
-                _taskList.value = tasks
+            repository.allTasks.collect { list ->
+                _tasks.value = list
             }
         }
     }
 
-    fun addTask(title: String, description: String = "", priority: Int = 1, dueDate: Long? = null) {
+    fun addTask(
+        title: String,
+        description: String,
+        priority: Int,
+        reminderTime: Long? = null
+    ) {
         if (title.isBlank()) return
-        
         viewModelScope.launch {
-            val newTask = Task(
-                title = title,
-                description = description,
-                priority = priority,
-                dueDate = dueDate
+            repository.insert(
+                Task(
+                    title        = title.trim(),
+                    description  = description.trim(),
+                    priority     = priority,
+                    reminderTime = reminderTime
+                )
             )
-            repository.addTask(newTask)
         }
     }
 
     fun updateTask(task: Task) {
-        viewModelScope.launch {
-            repository.updateTask(task)
-        }
+        viewModelScope.launch { repository.update(task) }
     }
 
     fun deleteTask(task: Task) {
-        viewModelScope.launch {
-            repository.deleteTask(task)
-        }
-    }
-
-    fun setSearchQuery(query: String) {
-        _searchQuery.value = query
-    }
-
-    fun getFilteredTasks(): List<Task> {
-        val query = _searchQuery.value.lowercase()
-        return if (query.isEmpty()) {
-            _taskList.value
-        } else {
-            _taskList.value.filter { task ->
-                task.title.lowercase().contains(query) ||
-                task.description.lowercase().contains(query)
-            }
-        }
+        viewModelScope.launch { repository.delete(task) }
     }
 }

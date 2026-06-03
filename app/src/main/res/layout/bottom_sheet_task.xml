@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="vertical" android:paddingHorizontal="24dp"
+        android:paddingTop="16dp" android:paddingBottom="32dp"
+        android:background="@color/sheet_bg">
+
+        <View android:layout_width="40dp" android:layout_height="4dp"
+            android:layout_gravity="center_horizontal" android:layout_marginBottom="20dp"
+            android:background="@drawable/bg_drag_handle" />
+
+        <TextView android:id="@+id/tvSheetTitle" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="New Task"
+            android:textSize="24sp" android:textStyle="bold"
+            android:textColor="@color/text_primary" android:layout_marginBottom="20dp" />
+
+        <!-- Title -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilTitle"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:hint="Task title *"
+            app:boxCornerRadiusTopStart="14dp" app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp" app:boxCornerRadiusBottomEnd="14dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etTitle" android:layout_width="match_parent"
+                android:layout_height="wrap_content" android:inputType="textCapSentences"
+                android:imeOptions="actionNext" android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Description -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Description (optional)"
+            app:boxCornerRadiusTopStart="14dp" app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp" app:boxCornerRadiusBottomEnd="14dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etDescription" android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textMultiLine"
+                android:minLines="2" android:maxLines="4" android:gravity="top" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Priority -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:layout_marginBottom="8dp"
+            android:text="Priority" android:textSize="14sp" android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+
+        <RadioGroup android:id="@+id/rgPriority" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="horizontal"
+            android:checkedButton="@+id/rbMedium">
+            <RadioButton android:id="@+id/rbHigh" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:text="🔴 High" android:textSize="13sp"
+                android:buttonTint="@color/priority_high_text" />
+            <RadioButton android:id="@+id/rbMedium" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:text="🟠 Medium" android:textSize="13sp"
+                android:buttonTint="@color/priority_med_text" />
+            <RadioButton android:id="@+id/rbLow" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:text="🟢 Low" android:textSize="13sp"
+                android:buttonTint="@color/priority_low_text" />
+        </RadioGroup>
+
+        <!-- Category -->
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" android:layout_marginBottom="8dp"
+            android:text="Category" android:textSize="14sp" android:textStyle="bold"
+            android:textColor="@color/text_primary" />
+
+        <Spinner android:id="@+id/spinnerCategory" android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/bg_spinner"
+            android:paddingHorizontal="12dp" />
+
+        <!-- Divider -->
+        <View android:layout_width="match_parent" android:layout_height="1dp"
+            android:layout_marginTop="20dp" android:layout_marginBottom="16dp"
+            android:background="@color/divider" />
+
+        <!-- Reminder section -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content"
+                android:layout_weight="1" android:text="⏰  Reminder"
+                android:textSize="15sp" android:textStyle="bold"
+                android:textColor="@color/text_primary" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Tap below to set"
+                android:textSize="12sp" android:textColor="@color/text_secondary" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSetReminder"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent" android:layout_height="52dp"
+            android:text="🕐  Set Date &amp; Time" android:textSize="14sp"
+            android:textColor="@color/purple_primary"
+            app:strokeColor="@color/purple_primary" app:strokeWidth="1.5dp"
+            app:cornerRadius="14dp" />
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:gravity="center_vertical"
+            android:layout_marginTop="10dp">
+            <TextView android:id="@+id/tvReminderChip" android:layout_width="0dp"
+                android:layout_height="wrap_content" android:layout_weight="1"
+                android:paddingHorizontal="14dp" android:paddingVertical="8dp"
+                android:textSize="13sp" android:textStyle="bold"
+                android:textColor="@color/reminder_text"
+                android:background="@drawable/bg_reminder_chip"
+                android:visibility="gone" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearReminder"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content" android:layout_height="36dp"
+                android:layout_marginStart="8dp" android:text="Clear"
+                android:textColor="#D32F2F" android:textSize="12sp"
+                android:visibility="gone" app:rippleColor="#20D32F2F" />
+        </LinearLayout>
+
+        <!-- Action buttons -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:orientation="horizontal" android:layout_marginTop="24dp">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancel"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp" android:layout_height="52dp"
+                android:layout_weight="1" android:layout_marginEnd="8dp"
+                android:text="Cancel" android:textColor="@color/purple_primary"
+                app:strokeColor="@color/purple_primary" app:cornerRadius="14dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave" android:layout_width="0dp"
+                android:layout_height="52dp" android:layout_weight="1"
+                android:layout_marginStart="8dp" android:text="Save Task"
+                android:textColor="#FFFFFF"
+                app:backgroundTint="@color/purple_primary" app:cornerRadius="14dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

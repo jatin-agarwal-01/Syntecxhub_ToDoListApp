@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg_screen">
+
+    <!-- Locked overlay -->
+    <LinearLayout
+        android:id="@+id/layoutLocked"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="40dp"
+        android:visibility="gone">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="🔒" android:textSize="56sp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" android:text="Feature Locked"
+            android:textSize="22sp" android:textStyle="bold" android:textColor="@color/text_primary" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" android:gravity="center"
+            android:text="Search &amp; Filter is only available for registered users"
+            android:textSize="14sp" android:textColor="@color/text_secondary" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnUnlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Login / Register"
+            android:textColor="#FFFFFF"
+            app:backgroundTint="@color/purple_primary"
+            app:cornerRadius="14dp" />
+    </LinearLayout>
+
+    <!-- Actual content -->
+    <LinearLayout
+        android:id="@+id/layoutContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search Tasks"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Search bar -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Search your tasks..."
+            app:startIconDrawable="@android:drawable/ic_menu_search"
+            app:boxCornerRadiusTopStart="14dp" app:boxCornerRadiusTopEnd="14dp"
+            app:boxCornerRadiusBottomStart="14dp" app:boxCornerRadiusBottomEnd="14dp">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:imeOptions="actionSearch" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Filter chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:scrollbars="none">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <com.google.android.material.chip.Chip android:id="@+id/chipAll"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="All" android:layout_marginEnd="6dp" />
+                <com.google.android.material.chip.Chip android:id="@+id/chipHigh"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🔴 High" android:layout_marginEnd="6dp" />
+                <com.google.android.material.chip.Chip android:id="@+id/chipMedium"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🟠 Medium" android:layout_marginEnd="6dp" />
+                <com.google.android.material.chip.Chip android:id="@+id/chipLow"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:text="🟢 Low" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- Result count -->
+        <TextView
+            android:id="@+id/tvResultCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="8dp"
+            android:text="Type to search your tasks"
+            android:textSize="13sp"
+            android:textColor="@color/text_secondary" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvResults"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+</LinearLayout>

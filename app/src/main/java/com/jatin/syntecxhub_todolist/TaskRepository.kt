@@ -2,23 +2,11 @@ package com.jatin.syntecxhub_todolist
 
 import kotlinx.coroutines.flow.Flow
 
-class TaskRepository(private val taskDao: TaskDao) {
-    
-    val allTasks: Flow<List<Task>> = taskDao.getAllTasks()
+class TaskRepository(private val dao: TaskDao) {
 
-    suspend fun addTask(task: Task) {
-        taskDao.insert(task)
-    }
+    val allTasks: Flow<List<Task>> = dao.getAllTasks()
 
-    suspend fun updateTask(task: Task) {
-        taskDao.update(task)
-    }
-
-    suspend fun deleteTask(task: Task) {
-        taskDao.delete(task)
-    }
-
-    suspend fun deleteAllTasks() {
-        taskDao.deleteAll()
-    }
+    suspend fun insert(task: Task) = dao.insert(task)
+    suspend fun update(task: Task) = dao.update(task)
+    suspend fun delete(task: Task) = dao.delete(task)
 }
