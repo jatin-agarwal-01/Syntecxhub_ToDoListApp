@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:paddingBottom="20dp"
+        android:paddingBottom="88dp"
         android:clipToPadding="false">
 
         <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingHorizontal="20dp"
-            android:paddingTop="24dp">
+            android:paddingTop="36dp">
 
             <!-- Header -->
             <TextView

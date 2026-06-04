@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- Brand (same in both modes) -->
     <color name="purple_primary">#6750A4</color>
     <color name="purple_dark">#4A3780</color>
     <color name="purple_light">#EAE0F8</color>
+
+    <!-- Semantic — LIGHT MODE -->
     <color name="bg_screen">#F4F1FA</color>
-    <color name="white">#FFFFFF</color>
-    <color name="sheet_bg">#FAFAFA</color>
-    <color name="card_stroke">#EDE8F5</color>
-    <color name="divider">#EBEBEB</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="bg_sheet">#FAFAFA</color>
     <color name="text_primary">#1C1B1F</color>
     <color name="text_secondary">#757575</color>
+    <color name="card_stroke">#EDE8F5</color>
+    <color name="divider">#EBEBEB</color>
+    <color name="bottom_nav_bg">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="sheet_bg">#FAFAFA</color>
+
+    <!-- Priority -->
     <color name="priority_high_text">#C62828</color>
     <color name="priority_med_text">#E65100</color>
     <color name="priority_low_text">#2E7D32</color>
+
+    <!-- Reminder chip -->
     <color name="reminder_bg">#E8F4FD</color>
     <color name="reminder_text">#0277BD</color>
     <color name="reminder_stroke">#B3E0FF</color>
+
+    <!-- Category chip -->
     <color name="category_bg">#F0EBFF</color>
+
+    <!-- Bottom nav -->
     <color name="bottom_nav_selected">#6750A4</color>
     <color name="bottom_nav_unselected">#9E9E9E</color>
-    <!-- Required by Material / legacy -->
+
+    <!-- Material required -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
+
 </resources>

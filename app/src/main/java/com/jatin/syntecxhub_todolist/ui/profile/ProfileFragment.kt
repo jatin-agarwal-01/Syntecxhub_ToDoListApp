@@ -40,23 +40,26 @@ class ProfileFragment : Fragment() {
             binding.layoutLocked.visible()
             binding.layoutContent.gone()
             binding.btnUnlock.setOnClickListener {
-                startActivity(android.content.Intent(
-                    requireContext(),
-                    com.jatin.syntecxhub_todolist.auth.LoginActivity::class.java
-                ))
+                startActivity(
+                    android.content.Intent(
+                        requireContext(),
+                        com.jatin.syntecxhub_todolist.auth.LoginActivity::class.java
+                    )
+                )
             }
             return
         }
 
         setupProfile()
         setupDarkMode()
+        setupTimeFormat()
         setupStats()
         setupLogout()
     }
 
     private fun setupProfile() {
-        binding.tvName.text    = session.getUserName()
-        binding.tvEmail.text   = session.getUserEmail()
+        binding.tvName.text  = session.getUserName()
+        binding.tvEmail.text = session.getUserEmail()
         binding.tvInitials.text = session.getUserName()
             .split(" ")
             .take(2)
@@ -69,9 +72,33 @@ class ProfileFragment : Fragment() {
             session.setDarkMode(isChecked)
             AppCompatDelegate.setDefaultNightMode(
                 if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
-                else AppCompatDelegate.MODE_NIGHT_NO
+                else           AppCompatDelegate.MODE_NIGHT_NO
             )
             toast(if (isChecked) "Dark mode on 🌙" else "Light mode on ☀️")
+        }
+    }
+
+    private fun setupTimeFormat() {
+        // Show current selection label
+        fun updateLabel() {
+            binding.tvTimeFormatValue.text =
+                if (session.isUse24Hr()) "24-hour" else "12-hour (AM/PM)"
+        }
+        updateLabel()
+
+        binding.layoutTimeFormat.setOnClickListener {
+            val options = arrayOf("12-hour  (e.g. 08:30 PM)", "24-hour  (e.g. 20:30)")
+            val current = if (session.isUse24Hr()) 1 else 0
+
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Time Format")
+                .setSingleChoiceItems(options, current) { dialog, which ->
+                    session.setUse24Hr(which == 1)
+                    updateLabel()
+                    toast(if (which == 1) "Switched to 24-hour 🕐" else "Switched to 12-hour 🕐")
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
 

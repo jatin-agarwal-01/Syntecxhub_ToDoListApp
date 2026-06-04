@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Brand (same in both modes) -->
+    <color name="purple_primary">#9C7FD4</color>
+    <color name="purple_dark">#4A3780</color>
+    <color name="purple_light">#2D2040</color>
+
+    <!-- Semantic — DARK MODE (pure black theme) -->
+    <color name="bg_screen">#000000</color>
+    <color name="bg_card">#121212</color>
+    <color name="bg_sheet">#1A1A1A</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#AAAAAA</color>
+    <color name="card_stroke">#2C2C2C</color>
+    <color name="divider">#2C2C2C</color>
+    <color name="bottom_nav_bg">#121212</color>
+    <color name="white">#121212</color>
+    <color name="sheet_bg">#1A1A1A</color>
+
+    <!-- Priority (slightly lighter for dark bg) -->
+    <color name="priority_high_text">#FF6B6B</color>
+    <color name="priority_med_text">#FFB347</color>
+    <color name="priority_low_text">#69D669</color>
+
+    <!-- Reminder chip -->
+    <color name="reminder_bg">#0D2A3D</color>
+    <color name="reminder_text">#64B5F6</color>
+    <color name="reminder_stroke">#1565C0</color>
+
+    <!-- Category chip -->
+    <color name="category_bg">#1E1030</color>
+
+    <!-- Bottom nav -->
+    <color name="bottom_nav_selected">#9C7FD4</color>
+    <color name="bottom_nav_unselected">#666666</color>
+
+</resources>

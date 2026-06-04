@@ -41,6 +41,11 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
+        <!-- ── New dedicated Add/Edit Task page ── -->
+        <activity android:name=".ui.task.AddEditTaskActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <receiver android:name=".utils.ReminderReceiver"
             android:exported="false">
             <intent-filter>
