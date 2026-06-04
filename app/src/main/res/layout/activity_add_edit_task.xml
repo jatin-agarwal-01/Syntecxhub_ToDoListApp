@@ -31,28 +31,30 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:fillViewport="true"
-        android:paddingBottom="80dp"
+        android:paddingBottom="100dp"
         android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="20dp"
-            android:paddingTop="28dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="52dp"
             android:paddingBottom="20dp">
 
-            <!-- ── Title ── -->
+            <!-- ── Title section label ── -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Task Details"
+                android:text="TASK DETAILS"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/purple_primary"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="12dp"
                 android:letterSpacing="0.1" />
 
+            <!-- Title input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilTitle"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -73,7 +75,7 @@
                     android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- ── Description ── -->
+            <!-- Description input -->
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -95,9 +97,9 @@
                     android:gravity="top" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- ── Section divider ── -->
+            <!-- Divider -->
             <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginTop="24dp" android:layout_marginBottom="20dp"
+                android:layout_marginTop="28dp" android:layout_marginBottom="20dp"
                 android:background="@color/divider" />
 
             <!-- ── Priority ── -->
@@ -111,60 +113,53 @@
                 android:layout_marginBottom="12dp"
                 android:letterSpacing="0.1" />
 
-            <!-- Priority cards row -->
-            <LinearLayout
+            <RadioGroup
+                android:id="@+id/rgPriority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:checkedButton="@+id/rbMedium">
 
-                <!-- High -->
-                <RadioGroup
-                    android:id="@+id/rgPriority"
-                    android:layout_width="match_parent"
+                <RadioButton
+                    android:id="@+id/rbHigh"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:checkedButton="@+id/rbMedium">
+                    android:layout_weight="1"
+                    android:text="🔴  High"
+                    android:textSize="13sp"
+                    android:padding="12dp"
+                    android:buttonTint="@color/priority_high_text"
+                    android:background="@drawable/bg_priority_selector" />
 
-                    <RadioButton
-                        android:id="@+id/rbHigh"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="🔴  High"
-                        android:textSize="13sp"
-                        android:padding="12dp"
-                        android:buttonTint="@color/priority_high_text"
-                        android:background="@drawable/bg_priority_selector" />
+                <RadioButton
+                    android:id="@+id/rbMedium"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="🟠  Med"
+                    android:textSize="13sp"
+                    android:padding="12dp"
+                    android:buttonTint="@color/priority_med_text"
+                    android:background="@drawable/bg_priority_selector" />
 
-                    <RadioButton
-                        android:id="@+id/rbMedium"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginHorizontal="8dp"
-                        android:text="🟠  Med"
-                        android:textSize="13sp"
-                        android:padding="12dp"
-                        android:buttonTint="@color/priority_med_text"
-                        android:background="@drawable/bg_priority_selector" />
+                <RadioButton
+                    android:id="@+id/rbLow"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="🟢  Low"
+                    android:textSize="13sp"
+                    android:padding="12dp"
+                    android:buttonTint="@color/priority_low_text"
+                    android:background="@drawable/bg_priority_selector" />
 
-                    <RadioButton
-                        android:id="@+id/rbLow"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="🟢  Low"
-                        android:textSize="13sp"
-                        android:padding="12dp"
-                        android:buttonTint="@color/priority_low_text"
-                        android:background="@drawable/bg_priority_selector" />
+            </RadioGroup>
 
-                </RadioGroup>
-            </LinearLayout>
-
-            <!-- ── Section divider ── -->
+            <!-- Divider -->
             <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginTop="24dp" android:layout_marginBottom="20dp"
+                android:layout_marginTop="28dp" android:layout_marginBottom="20dp"
                 android:background="@color/divider" />
 
             <!-- ── Category ── -->
@@ -183,11 +178,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="52dp"
                 android:background="@drawable/bg_spinner"
-                android:paddingHorizontal="12dp" />
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp" />
 
-            <!-- ── Section divider ── -->
+            <!-- Divider -->
             <View android:layout_width="match_parent" android:layout_height="1dp"
-                android:layout_marginTop="24dp" android:layout_marginBottom="20dp"
+                android:layout_marginTop="28dp" android:layout_marginBottom="20dp"
                 android:background="@color/divider" />
 
             <!-- ── Reminder ── -->
@@ -240,8 +236,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingHorizontal="14dp"
-                    android:paddingVertical="10dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="@color/reminder_text"
@@ -272,7 +270,7 @@
         android:layout_gravity="bottom"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:text="Save Task"
         android:textSize="16sp"
         android:textStyle="bold"
