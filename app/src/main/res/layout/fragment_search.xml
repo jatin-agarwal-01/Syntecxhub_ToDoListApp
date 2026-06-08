@@ -41,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:paddingTop="48dp"
         android:paddingBottom="20dp">
 
@@ -77,23 +78,42 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:scrollbars="none">
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupPriority"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <com.google.android.material.chip.Chip android:id="@+id/chipAll"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="All" android:layout_marginEnd="6dp" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipHigh"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="🔴 High" android:layout_marginEnd="6dp" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipMedium"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="🟠 Medium" android:layout_marginEnd="6dp" />
-                <com.google.android.material.chip.Chip android:id="@+id/chipLow"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:selectionRequired="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipAll"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="All"
+                    android:checked="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipHigh"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔴 High" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipMedium"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🟠 Medium" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chipLow"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="🟢 Low" />
-            </LinearLayout>
+            </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
         <!-- Result count -->

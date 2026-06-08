@@ -31,6 +31,9 @@
     <!-- Category chip -->
     <color name="category_bg">#1E1030</color>
 
+    <!-- Accessible hint text — on dark bg (#121212 → contrast > 7:1) -->
+    <color name="text_hint">#AAAAAA</color>
+
     <!-- Bottom nav -->
     <color name="bottom_nav_selected">#9C7FD4</color>
     <color name="bottom_nav_unselected">#666666</color>

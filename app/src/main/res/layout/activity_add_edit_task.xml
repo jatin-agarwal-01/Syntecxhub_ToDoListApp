@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/purple_primary"
+        android:paddingTop="30dp"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -21,7 +22,7 @@
             android:background="@color/purple_primary"
             app:titleTextColor="#FFFFFF"
             app:navigationIconTint="#FFFFFF"
-            app:title="New Task" />
+            app:title="@string/title_new_task" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -40,14 +41,14 @@
             android:orientation="vertical"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
-            android:paddingTop="52dp"
+            android:paddingTop="20dp"
             android:paddingBottom="20dp">
 
             <!-- ── Title section label ── -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TASK DETAILS"
+                android:text="@string/label_task_details"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/purple_primary"
@@ -60,7 +61,7 @@
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Task title *"
+                android:hint="@string/hint_task_title"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
                 app:boxCornerRadiusBottomStart="14dp"
@@ -72,7 +73,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="textCapSentences"
                     android:imeOptions="actionNext"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Description input -->
@@ -81,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                android:hint="Description (optional)"
+                android:hint="@string/hint_description"
                 app:boxCornerRadiusTopStart="14dp"
                 app:boxCornerRadiusTopEnd="14dp"
                 app:boxCornerRadiusBottomStart="14dp"
@@ -94,7 +96,8 @@
                     android:inputType="textCapSentences|textMultiLine"
                     android:minLines="3"
                     android:maxLines="6"
-                    android:gravity="top" />
+                    android:gravity="top"
+                    android:textColor="@color/text_primary" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Divider -->
@@ -106,7 +109,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PRIORITY"
+                android:text="@string/label_priority"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/purple_primary"
@@ -125,8 +128,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🔴  High"
+                    android:text="@string/priority_high"
                     android:textSize="13sp"
+                    android:textColor="@color/text_primary"
                     android:padding="12dp"
                     android:buttonTint="@color/priority_high_text"
                     android:background="@drawable/bg_priority_selector" />
@@ -138,8 +142,9 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="🟠  Med"
+                    android:text="@string/priority_medium"
                     android:textSize="13sp"
+                    android:textColor="@color/text_primary"
                     android:padding="12dp"
                     android:buttonTint="@color/priority_med_text"
                     android:background="@drawable/bg_priority_selector" />
@@ -149,8 +154,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="🟢  Low"
+                    android:text="@string/priority_low"
                     android:textSize="13sp"
+                    android:textColor="@color/text_primary"
                     android:padding="12dp"
                     android:buttonTint="@color/priority_low_text"
                     android:background="@drawable/bg_priority_selector" />
@@ -166,7 +172,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CATEGORY"
+                android:text="@string/label_category"
                 android:textSize="13sp"
                 android:textStyle="bold"
                 android:textColor="@color/purple_primary"
@@ -197,7 +203,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="REMINDER"
+                    android:text="@string/label_reminder"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:textColor="@color/purple_primary"
@@ -205,9 +211,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Optional"
+                    android:text="@string/label_optional"
                     android:textSize="12sp"
-                    android:textColor="@color/text_secondary" />
+                    android:textColor="@color/text_hint" />
             </LinearLayout>
 
             <!-- Set reminder button -->
@@ -216,7 +222,7 @@
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:text="🕐  Set Date &amp; Time"
+                android:text="@string/btn_set_reminder"
                 android:textSize="15sp"
                 android:textColor="@color/purple_primary"
                 app:strokeColor="@color/purple_primary"
@@ -252,7 +258,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
                     android:layout_marginStart="8dp"
-                    android:text="Clear"
+                    android:text="@string/btn_clear"
                     android:textColor="#D32F2F"
                     android:textSize="12sp"
                     android:visibility="gone"
@@ -271,7 +277,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Save Task"
+        android:text="@string/btn_save_task"
         android:textSize="16sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"

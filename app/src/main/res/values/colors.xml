@@ -35,6 +35,9 @@
     <color name="bottom_nav_selected">#6750A4</color>
     <color name="bottom_nav_unselected">#9E9E9E</color>
 
+    <!-- Accessible hint text — 4.6:1 contrast on white (passes WCAG AA) -->
+    <color name="text_hint">#595959</color>
+
     <!-- Material required -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

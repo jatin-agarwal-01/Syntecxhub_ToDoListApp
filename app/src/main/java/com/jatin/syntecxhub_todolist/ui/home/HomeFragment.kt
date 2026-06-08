@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.jatin.syntecxhub_todolist.R
 import com.jatin.syntecxhub_todolist.data.model.Task
 import com.jatin.syntecxhub_todolist.databinding.FragmentHomeBinding
 import com.jatin.syntecxhub_todolist.ui.task.AddEditTaskActivity
@@ -36,6 +37,9 @@ class HomeFragment : Fragment() {
     private val viewModel: TaskViewModel by activityViewModels()
     private lateinit var adapter: TaskAdapter
     private lateinit var session: SessionManager
+
+    /** Current display filter: null = All, true = Done, false = Active */
+    private var showCompleted: Boolean? = null
 
     private val notifPermLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
@@ -58,11 +62,24 @@ class HomeFragment : Fragment() {
         requestNotifPermission()
         setupRecyclerView()
         setupSwipeToDelete()
+        setupFilterChips()
         observeTasks()
 
-        // FAB opens the new dedicated Add Task page
         binding.fabAdd.setOnClickListener {
             AddEditTaskActivity.startForAdd(requireContext())
+        }
+    }
+
+    /* ── Filter chips ─────────────────────────────────────── */
+
+    private fun setupFilterChips() {
+        binding.chipGroupFilter.setOnCheckedStateChangeListener { _, _ ->
+            showCompleted = when (binding.chipGroupFilter.checkedChipId) {
+                R.id.chipFilterDone   -> true
+                R.id.chipFilterActive -> false
+                else                  -> null
+            }
+            applyFilter(viewModel.tasks.value)
         }
     }
 
@@ -74,10 +91,7 @@ class HomeFragment : Fragment() {
                 viewModel.updateTask(task)
                 if (task.isCompleted) ReminderScheduler.cancel(requireContext(), task.id)
             },
-            onEdit   = { task ->
-                // Opens the new Edit Task page
-                AddEditTaskActivity.startForEdit(requireContext(), task)
-            },
+            onEdit   = { task -> AddEditTaskActivity.startForEdit(requireContext(), task) },
             onDelete = { task -> deleteWithUndo(task) }
         )
         binding.rvTasks.layoutManager = LinearLayoutManager(requireContext())
@@ -92,7 +106,7 @@ class HomeFragment : Fragment() {
             override fun onMove(rv: RecyclerView, vh: RecyclerView.ViewHolder,
                                 t: RecyclerView.ViewHolder) = false
             override fun onSwiped(vh: RecyclerView.ViewHolder, dir: Int) {
-                val pos = vh.adapterPosition
+                val pos = vh.bindingAdapterPosition
                 if (pos != RecyclerView.NO_POSITION) deleteWithUndo(adapter.currentList[pos])
             }
         }).attachToRecyclerView(binding.rvTasks)
@@ -103,8 +117,7 @@ class HomeFragment : Fragment() {
     private fun observeTasks() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.tasks.collect { tasks ->
-                adapter.submitList(tasks)
-
+                // Update dashboard stats (always based on all tasks)
                 val total    = tasks.size
                 val done     = tasks.count { it.isCompleted }
                 val pending  = total - done
@@ -121,12 +134,22 @@ class HomeFragment : Fragment() {
                     pending == 1     -> "Just 1 task left — you got this! 💪"
                     else             -> "You have $pending task${if (pending > 1) "s" else ""} pending"
                 }
-                binding.layoutEmpty.visibility =
-                    if (tasks.isEmpty()) View.VISIBLE else View.GONE
-                binding.rvTasks.visibility     =
-                    if (tasks.isEmpty()) View.GONE else View.VISIBLE
+
+                applyFilter(tasks)
             }
         }
+    }
+
+    private fun applyFilter(tasks: List<Task>) {
+        val filtered = when (showCompleted) {
+            true  -> tasks.filter { it.isCompleted }
+            false -> tasks.filter { !it.isCompleted }
+            null  -> tasks
+        }
+        adapter.submitList(filtered)
+        val isEmpty = filtered.isEmpty()
+        binding.layoutEmpty.visibility = if (isEmpty) View.VISIBLE else View.GONE
+        binding.rvTasks.visibility     = if (isEmpty) View.GONE    else View.VISIBLE
     }
 
     /* ── Guest locked dialog ───────────────────────────────── */

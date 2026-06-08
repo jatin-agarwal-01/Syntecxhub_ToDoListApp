@@ -5,9 +5,11 @@ import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.jatin.syntecxhub_todolist.R
 import com.jatin.syntecxhub_todolist.data.model.Task
 import com.jatin.syntecxhub_todolist.databinding.ItemTaskBinding
 import com.jatin.syntecxhub_todolist.utils.SessionManager
@@ -25,20 +27,23 @@ class TaskAdapter(
         RecyclerView.ViewHolder(b.root) {
 
         fun bind(task: Task) {
-
-            val session = SessionManager(b.root.context)
+            val ctx     = b.root.context
+            val session = SessionManager(ctx)
 
             b.tvTitle.text = task.title
 
-            // Completed styling
+            // Completed styling — use theme-aware colors
+            val colorPrimary   = ContextCompat.getColor(ctx, R.color.text_primary)
+            val colorSecondary = ContextCompat.getColor(ctx, R.color.text_secondary)
+
             if (task.isCompleted) {
                 b.tvTitle.paintFlags = b.tvTitle.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                b.tvTitle.setTextColor(Color.parseColor("#9E9E9E"))
-                b.cardRoot.alpha = 0.60f
+                b.tvTitle.setTextColor(colorSecondary)
+                b.cardRoot.alpha = 0.55f
             } else {
                 b.tvTitle.paintFlags =
                     b.tvTitle.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                b.tvTitle.setTextColor(Color.parseColor("#1C1B1F"))
+                b.tvTitle.setTextColor(colorPrimary)
                 b.cardRoot.alpha = 1f
             }
 
@@ -57,21 +62,25 @@ class TaskAdapter(
             // Category chip
             b.tvCategory.text = "📁 ${task.category}"
 
-            // Priority chip
-            val (bg, fg, label) = when (task.priority) {
-                0    -> Triple("#FFCDD2", "#B71C1C", "HIGH")
-                1    -> Triple("#FFE0B2", "#E65100", "MED")
-                else -> Triple("#C8E6C9", "#1B5E20", "LOW")
+            // Priority — chip text + stripe color
+            val (bgHex, fgHex, label, stripeHex) = when (task.priority) {
+                0    -> Quad("#FFCDD2", "#B71C1C", "HIGH", "#C62828")
+                1    -> Quad("#FFE0B2", "#E65100", "MED",  "#E65100")
+                else -> Quad("#C8E6C9", "#1B5E20", "LOW",  "#2E7D32")
             }
             b.chipPriority.text = label
-            b.chipPriority.setBackgroundColor(Color.parseColor(bg))
-            b.chipPriority.setTextColor(Color.parseColor(fg))
+            b.chipPriority.setBackgroundColor(Color.parseColor(bgHex))
+            b.chipPriority.setTextColor(Color.parseColor(fgHex))
+
+            // Left priority stripe
+            b.priorityStripe.setBackgroundColor(Color.parseColor(stripeHex))
+            b.priorityStripe.alpha = if (task.isCompleted) 0.3f else 1f
 
             // Reminder chip — respects 12/24hr preference
             val rem = task.reminderTime
             if (rem != null && !task.isCompleted) {
                 val pattern = if (session.isUse24Hr()) "EEE, MMM d • HH:mm"
-                else                     "EEE, MMM d • hh:mm a"
+                              else                     "EEE, MMM d • hh:mm a"
                 b.tvReminder.text       =
                     "⏰ " + SimpleDateFormat(pattern, Locale.getDefault()).format(Date(rem))
                 b.tvReminder.visibility = View.VISIBLE
@@ -103,4 +112,7 @@ class TaskAdapter(
         override fun areItemsTheSame(old: Task, new: Task) = old.id == new.id
         override fun areContentsTheSame(old: Task, new: Task) = old == new
     }
+
+    /** Simple 4-element tuple to avoid Destructuring issues with Triple + extra field. */
+    private data class Quad(val bg: String, val fg: String, val label: String, val stripe: String)
 }

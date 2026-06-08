@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SyntecxHub ToDo</string>
+
+    <!-- Activity Add/Edit Task -->
+    <string name="label_task_details">TASK DETAILS</string>
+    <string name="label_priority">PRIORITY</string>
+    <string name="label_category">CATEGORY</string>
+    <string name="label_reminder">REMINDER</string>
+    <string name="label_optional">Optional</string>
+    <string name="hint_task_title">Task title *</string>
+    <string name="hint_description">Description (optional)</string>
+    <string name="priority_high">&#x1F534;  High</string>
+    <string name="priority_medium">&#x1F7E0;  Med</string>
+    <string name="priority_low">&#x1F7E2;  Low</string>
+    <string name="btn_set_reminder">&#x1F550;  Set Date &amp; Time</string>
+    <string name="btn_save_task">Save Task</string>
+    <string name="btn_clear">Clear</string>
+    <string name="title_new_task">New Task</string>
 </resources>

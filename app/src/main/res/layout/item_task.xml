@@ -6,80 +6,162 @@
     android:id="@+id/cardRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
+    android:layout_marginBottom="10dp"
     android:clickable="true"
     android:focusable="true"
-    app:cardCornerRadius="18dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="0dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/bg_card"
     app:strokeColor="@color/card_stroke"
     app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="14dp"
-        android:paddingBottom="12dp">
+        android:orientation="horizontal">
 
-        <!-- Row 1: checkbox | title | priority -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:gravity="center_vertical">
-            <CheckBox android:id="@+id/cbDone" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginEnd="10dp"
-                android:buttonTint="@color/purple_primary" />
-            <TextView android:id="@+id/tvTitle" android:layout_width="0dp"
-                android:layout_height="wrap_content" android:layout_weight="1"
-                android:textSize="16sp" android:textStyle="bold" android:textColor="@color/text_primary"
-                android:maxLines="2" android:ellipsize="end" tools:text="Buy groceries" />
-            <TextView android:id="@+id/chipPriority" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:layout_marginStart="8dp"
-                android:paddingHorizontal="10dp" android:paddingVertical="4dp"
-                android:textSize="10sp" android:textStyle="bold" android:text="MED" />
-        </LinearLayout>
+        <!-- Priority left stripe -->
+        <View
+            android:id="@+id/priorityStripe"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="#B71C1C" />
 
-        <!-- Description -->
-        <TextView android:id="@+id/tvDescription" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:layout_marginTop="5dp"
-            android:layout_marginStart="38dp" android:textSize="13sp"
-            android:textColor="@color/text_secondary" android:maxLines="2"
-            android:ellipsize="end" android:visibility="gone"
-            tools:text="Pick up milk and eggs" tools:visibility="visible" />
+        <!-- Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="12dp">
 
-        <!-- Category + Reminder row -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:layout_marginTop="8dp"
-            android:layout_marginStart="38dp">
+            <!-- Row 1: checkbox | title | priority chip -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
 
-            <TextView android:id="@+id/tvCategory" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:paddingHorizontal="8dp"
-                android:paddingVertical="3dp" android:textSize="11sp"
-                android:textColor="@color/purple_primary"
-                android:background="@drawable/bg_category_chip"
-                android:layout_marginEnd="8dp" tools:text="📁 Work" />
+                <CheckBox
+                    android:id="@+id/cbDone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:buttonTint="@color/purple_primary" />
 
-            <TextView android:id="@+id/tvReminder" android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:paddingHorizontal="8dp"
-                android:paddingVertical="3dp" android:textSize="11sp"
-                android:textStyle="bold" android:textColor="@color/reminder_text"
-                android:background="@drawable/bg_reminder_chip"
-                android:visibility="gone" tools:text="⏰ Mon 08:00 AM" tools:visibility="visible" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="Buy groceries" />
 
-        <!-- Date + Delete row -->
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:orientation="horizontal" android:gravity="center_vertical"
-            android:layout_marginTop="8dp" android:layout_marginStart="38dp">
-            <TextView android:id="@+id/tvDate" android:layout_width="0dp"
-                android:layout_height="wrap_content" android:layout_weight="1"
-                android:textSize="11sp" android:textColor="@color/text_secondary"
-                tools:text="Jun 3, 2026" />
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnDelete" style="@style/Widget.Material3.Button.TextButton"
-                android:layout_width="wrap_content" android:layout_height="32dp"
-                android:text="Delete" android:textColor="#D32F2F" android:textSize="12sp"
-                app:rippleColor="#20D32F2F" />
+                <TextView
+                    android:id="@+id/chipPriority"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:paddingStart="9dp"
+                    android:paddingEnd="9dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:text="MED" />
+            </LinearLayout>
+
+            <!-- Description -->
+            <TextView
+                android:id="@+id/tvDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="36dp"
+                android:textSize="13sp"
+                android:textColor="@color/text_secondary"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:text="Pick up milk and eggs"
+                tools:visibility="visible" />
+
+            <!-- Category + Reminder row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="9dp"
+                android:layout_marginStart="36dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="11sp"
+                    android:textColor="@color/purple_primary"
+                    android:background="@drawable/bg_category_chip"
+                    android:layout_marginEnd="8dp"
+                    tools:text="📁 Work" />
+
+                <TextView
+                    android:id="@+id/tvReminder"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingBottom="3dp"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/reminder_text"
+                    android:background="@drawable/bg_reminder_chip"
+                    android:visibility="gone"
+                    tools:text="⏰ Mon 08:00 AM"
+                    tools:visibility="visible" />
+            </LinearLayout>
+
+            <!-- Date + Delete row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="6dp"
+                android:layout_marginStart="36dp">
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="11sp"
+                    android:textColor="@color/text_secondary"
+                    tools:text="Jun 3, 2026" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDelete"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Delete"
+                    android:textColor="#D32F2F"
+                    android:textSize="12sp"
+                    app:rippleColor="#20D32F2F" />
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
